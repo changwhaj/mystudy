@@ -1,4 +1,4 @@
-const PASSKEY = Buffer.from("415a313034", "hex").toString("utf8");
+const PASSKEY = decoded = fromHex("415a313034");
 
 // Usage
 // zeroPad(1,10);   //=> 01
@@ -16,6 +16,18 @@ document.addEventListener('keydown', function (e) {
 document.addEventListener('keyup', function (e) {
     cntrlIsPressed = false;
 });
+
+// Hex 인코딩
+function toHex(str) {
+    return Array.from(new TextEncoder().encode(str))
+        .map(byte => byte.toString(16).padStart(2, '0'))
+        .join('');
+}
+// Hex 디코딩
+function fromHex(hexStr) {
+    const bytes = new Uint8Array(hexStr.match(/.{1,2}/g).map(byte => parseInt(byte, 16)));
+    return new TextDecoder().decode(bytes);
+}
 
 var cntrlIsPressed = false;
 //document.addEventListener("keydown", keyDownTextField, false);
@@ -160,7 +172,7 @@ function NewTab(question_id, discuss_id) {
         }
 
         //var url = "https://aws.amazon.com/"
-        if (passwd == PASSKEY) {
+        if (passwd.toUpperCase() == PASSKEY) {
             url = "https://changwhaj.github.io/exam-assets/exam/ms/AZ104/AZ104-Q" + question_id + ".html"
         } else {
             url = "https://www.examtopics.com/discussions/microsoft/view/" + discuss_id + "-exam-az-104-topic/";
